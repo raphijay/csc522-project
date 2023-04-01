@@ -5,7 +5,7 @@ This project will involve developing a machine learning model using supervised l
 
 ## Setup
 Required:
-* python 3.10
+* Python 3.x
 
 In the project directory, run `pip install -r requirements.txt`.
 
