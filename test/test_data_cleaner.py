@@ -4,7 +4,7 @@ import numpy as np
 import pytest
 
 @pytest.fixture
-def data():
+def standard_data():
     return pd.DataFrame(
         data = np.array([
             ['Square', 4, 'red', 10],
@@ -14,7 +14,16 @@ def data():
         ]), columns = ['Shape Name', 'Vertices', 'Color', 'Quantity']
     )
 
-def test_remove_rows_with_null_values_standard(data):
-    cleaned_data = dc.remove_rows_with_null_values(data)
+@pytest.fixture
+def empty_data():
+    return pd.DataFrame(
+        data = np.array([])
+    )
+
+def test_remove_rows_with_null_values_standard(standard_data):
+    cleaned_data = dc.remove_rows_with_null_values(standard_data)
     assert len(cleaned_data.index) == 3
 
+def test_remove_rows_with_null_values_empty(empty_data):
+    cleaned_data = dc.remove_rows_with_null_values(empty_data)
+    assert len(cleaned_data.index) == 0
