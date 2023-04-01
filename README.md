@@ -14,3 +14,5 @@ To run the notebook for the project, just run `jupyter ./src/project.ipynb` from
 
 ## How to Run Tests
 To run the full suite of tests for the project, just run `pytest` from the project directory.
+To run a subset of tests, pass in an argument to pytest that points to the file/function that you want to test.
+
