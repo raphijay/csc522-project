@@ -4,7 +4,6 @@ import numpy as np
 from src.custom_rf_regressor import CustomRandomForestRegressor
 from sklearn.model_selection import train_test_split
 from sklearn.datasets import load_wine
-from sklearn.metrics import mean_squared_error
 
 RANDOM_SEED = 522
 
@@ -27,25 +26,25 @@ def wine_data():
 
 def test_custom_rf_regressor_constructor_standard():
     try:
-        crfr = CustomRandomForestRegressor(n_trees = 50, max_depth = 3, min_samples_split = 2, random_seed = RANDOM_SEED)
+        CustomRandomForestRegressor(n_trees = 50, max_depth = 3, min_samples_split = 2, random_seed = RANDOM_SEED)
     except ValueError:
         assert False, 'Valid constructor arguments still caused the constructor to fail' 
 
 def test_custom_rf_regressor_constructor_bad_n_trees():
     with pytest.raises(ValueError):
-        crfr = CustomRandomForestRegressor(n_trees = 1, max_depth = 3, min_samples_split = 2, random_seed = RANDOM_SEED)
+        CustomRandomForestRegressor(n_trees = 1, max_depth = 3, min_samples_split = 2, random_seed = RANDOM_SEED)
 
 def test_custom_rf_regressor_constructor_bad_max_depth():
     with pytest.raises(ValueError):
-        crfr = CustomRandomForestRegressor(n_trees = 50, max_depth = 0, min_samples_split = 2, random_seed = RANDOM_SEED)
+        CustomRandomForestRegressor(n_trees = 50, max_depth = 0, min_samples_split = 2, random_seed = RANDOM_SEED)
 
 def test_custom_rf_regressor_constructor_bad_min_samples_split():
     with pytest.raises(ValueError):
-        crfr = CustomRandomForestRegressor(n_trees = 1, max_depth = 3, min_samples_split = 1, random_seed = RANDOM_SEED)
+        CustomRandomForestRegressor(n_trees = 1, max_depth = 3, min_samples_split = 1, random_seed = RANDOM_SEED)
 
 def test_custom_rf_regressor_constructor_no_random_seed():
     try:
-        crfr = CustomRandomForestRegressor(n_trees = 50, max_depth = 3, min_samples_split = 2)
+        CustomRandomForestRegressor(n_trees = 50, max_depth = 3, min_samples_split = 2)
     except ValueError:
         assert False, 'No random seed constructor argument still caused the constructor to fail'
 
