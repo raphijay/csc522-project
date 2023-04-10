@@ -1,8 +1,11 @@
 '''
-    A random forest implementation custom to the needs of this project.
-    Based off of the following reference implmentations:
+    A representation for an ensemble of neural networks, custom to the needs of this project.
+    This was originally based off of a custom random forest regressor, from the reference implmentations:
         * https://scikit-learn.org/stable/modules/generated/sklearn.tree.DecisionTreeRegressor.html
         * https://insidelearningmachines.com/build-a-random-forest-in-python/
+    
+    The need to change to an ensemble of neural networks as opposed to decision trees
+    was due to the application of neural networks in our project.
 '''
 
 import numpy as np
@@ -12,7 +15,7 @@ from sklearn.neural_network import MLPRegressor
 from sklearn.metrics import mean_squared_error
 
 
-class CustomRandomForestRegressor():
+class RandomNetworkEnsemble():
     
     # Constructor
     def __init__(self, num_networks, activation: str = 'relu', hidden_layer_sizes = (100,), learning_rate_init: float = 0.001, random_seed: int = None):
