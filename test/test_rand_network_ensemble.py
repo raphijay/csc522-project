@@ -59,7 +59,7 @@ def test_custom_rf_regressor_make_bootstraps(static_data):
 def test_custom_rf_regressor_train(wine_data):
     crfr = RandomNetworkEnsemble(num_networks = 3, activation = 'identity', hidden_layer_sizes = (3,), learning_rate_init = 0.01, random_seed = RANDOM_SEED)
     crfr.train(wine_data['training']['features'], wine_data['training']['target'])
-    assert(len(crfr.get_trees())) == 3
+    assert(len(crfr.get_networks())) == 3
 
 def test_custom_rf_regressor_predict(wine_data):
     crfr = RandomNetworkEnsemble(num_networks = 3, activation = 'identity', hidden_layer_sizes = (3,), learning_rate_init = 0.01, random_seed = RANDOM_SEED)

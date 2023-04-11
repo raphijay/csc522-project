@@ -42,7 +42,7 @@ class RandomNetworkEnsemble():
             self.resampler = np.random.RandomState(np.random.MT19937(np.random.SeedSequence(random_seed)))
 
     # Getter for trees
-    def get_trees(self):
+    def get_networks(self):
         return self.networks
 
     # Public bootstrapping function
