@@ -1,5 +1,10 @@
 import pandas as pd
 
+##
+# Preprocesses two datasets (forex.csv and USDINR.csv) and concatenates them vertically. It drops any
+# rows with missing values and duplicate rows, resets the index, and saves the merged and preprocessed
+# data as a new CSV file named "forex_dataset.csv".
+##
 def preprocess():
     # Read in the forex dataset
     forex       = pd.read_csv('forex.csv')
