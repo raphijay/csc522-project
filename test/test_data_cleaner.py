@@ -1,4 +1,4 @@
-import src.data_cleaner as dc
+import src.pre_processing as dc
 import pandas as pd
 import numpy as np
 import pytest
