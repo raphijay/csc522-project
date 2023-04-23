@@ -12,7 +12,7 @@ __status__ = "Production"
 ##
 # LSTM Model
 ##
-class LSTM():
+class CustomLSTM():
 
     ##
     # Creates an LSTM model for sequential data. The input parameters are:
