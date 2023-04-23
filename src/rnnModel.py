@@ -56,12 +56,12 @@ class LSTM():
     ##
     # Trains the LSTM model on the provided input and target data. It first checks if the model has
     # been built or not by checking if self.model is None. If the model has not been built, it builds
-    # the model using build_model method. It then trains the model using the fit method with the
+    # the model using lstm_model method. It then trains the model using the fit method with the
     # provided input and target data along with the number of epochs and batch size.
     ##
     def train(self, x_train, y_train):
         if self.model is None:
-            self.build_model()
+            self.lstm_model()
         self.model.fit(x_train, y_train, epochs = self.epochs, batch_size = self.batch_size)
 
     ##
