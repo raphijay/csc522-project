@@ -56,7 +56,7 @@ class CustomLSTM():
         self.model.add(LSTM(units = self.lstm_units, return_sequences = True, input_shape = self.input_shape))
         self.model.add(Dropout(0.2))
         self.model.add(Dense(units = self.dense_units, activation='relu'))
-        # self.model.add(Dense(units = self.output_shape, activation='linear'))
+        self.model.add(Dense(units = 1, activation='linear'))
         self.model.compile(optimizer = 'adam', loss = 'mse')
         return self.model
 
