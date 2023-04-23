@@ -20,10 +20,10 @@ def empty_data():
         data = np.array([])
     )
 
-def test_remove_rows_with_null_values_standard(standard_data):
-    cleaned_data = dc.remove_rows_with_null_values(standard_data)
+def pre_p_forex(standard_data):
+    cleaned_data = dc.pre_p_forex(standard_data)
     assert len(cleaned_data.index) == 3
 
-def test_remove_rows_with_null_values_empty(empty_data):
-    cleaned_data = dc.remove_rows_with_null_values(empty_data)
+def test_pre_p_usdinr(empty_data):
+    cleaned_data = dc.pre_p_usdinr(empty_data)
     assert len(cleaned_data.index) == 0
