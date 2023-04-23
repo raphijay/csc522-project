@@ -12,6 +12,7 @@ from sklearn.model_selection import train_test_split
 from tensorflow import keras
 from keras.models import Sequential
 from keras.layers import Dense, Dropout, LSTM
+from git.csc522-project.src.pre_processing import preprocess
 
 __author__ = "Rithik Jain"
 __credits__ = ["Thomas Price"]
@@ -20,9 +21,6 @@ __version__ = "1.0.0"
 __maintainer__ = "Rithik Jain"
 __email__ = "isrithikta@gmail.com"
 __status__ = "Production"
-
-# Load forex data
-forex_data = pd.read_csv('forex_data.csv')
 
 # Convert date column to datetime format
 forex_data['date'] = pd.to_datetime(forex_data['date'])
