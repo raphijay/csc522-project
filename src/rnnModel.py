@@ -1,5 +1,7 @@
 from keras.models import Sequential
 from keras.layers import Dense, Dropout, LSTM
+import numpy as np
+from sklearn.metrics import mean_squared_error
 
 __author__ = "Rithik Jain"
 __credits__ = ["Thomas Price"]
@@ -35,6 +37,10 @@ class CustomLSTM():
         self.epochs = epochs
         self.batch_size = batch_size
 
+    # Getter for trees
+    def get_networks(self):
+        return self.networks
+
     ##
     # Have LSTM, Dropout layers as a set of 3. A dense layer for forex prediction.
     # More units and layers would increase training time. Overfit if too many layers are used.
@@ -50,8 +56,9 @@ class CustomLSTM():
         self.model.add(LSTM(units = self.lstm_units, return_sequences = True, input_shape = self.input_shape))
         self.model.add(Dropout(0.2))
         self.model.add(Dense(units = self.dense_units, activation='relu'))
-        self.model.add(Dense(units = self.output_shape, activation='linear'))
+        # self.model.add(Dense(units = self.output_shape, activation='linear'))
         self.model.compile(optimizer = 'adam', loss = 'mse')
+        return self.model
 
     ##
     # Trains the LSTM model on the provided input and target data. It first checks if the model has
