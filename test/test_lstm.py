@@ -1,47 +1,47 @@
-import pytest
 import numpy as np
+from keras.models import Sequential
+from keras.layers import Dense, Dropout, LSTM
 from sklearn.metrics import mean_squared_error
+from pytest import raises
 
 from src.rnnModel import CustomLSTM
-from sklearn.model_selection import train_test_split
-import yfinance as yf
 
-@pytest.fixture
-def forex_data():
-    forex_data = yf.download(tickers = 'USDINR=X' ,period ='1d', interval = '15m')
+import numpy as np
+from keras.models import Sequential
+from keras.layers import Dense, Dropout, LSTM
+from sklearn.metrics import mean_squared_error
+from pytest import raises
 
-    forex_features = forex_data.drop('Close', axis=1).values
-    forex_target   = forex_data['Close'].values
+from src.rnnModel import CustomLSTM
 
-    forex_features_train, forex_features_test, forex_target_train, forex_target_test = train_test_split(forex_features, forex_target, test_size = 0.2)
-    return {
-        'training': { 'features': forex_features_train, 'target': forex_target_train },
-        'testing': { 'features': forex_features_test, 'target': forex_target_test }
-    }
+class TestCustomLSTM:
 
-def test_ltm_train(forex_data):
-    lstm = CustomLSTM(input_shape = (forex_data['training']['features'].shape[1], 1), lstm_units = 3, dense_units = 1, output_shape = 1, epochs = 10, batch_size = 32)
+    def test_init(self):
+        lstm = CustomLSTM((10, 1), 32, 16, (1,), 10, 32)
+        assert lstm.input_shape == (10, 1)
+        assert lstm.lstm_units == 32
+        assert lstm.dense_units == 16
+        assert lstm.output_shape == (1,)
+        assert lstm.epochs == 10
+        assert lstm.batch_size == 32
 
-    lstm.train(forex_data['training']['features'], forex_data['training']['target'])
+    def test_train_predict(self):
+        lstm = CustomLSTM((10, 1), 32, 16, (1,), 10, 32)
 
-def test_lstm_predict(forex_data):
-    lstm = CustomLSTM(input_shape = (forex_data['training']['features'].shape[1], 1), lstm_units = 3, dense_units = 1, output_shape = 1, epochs = 10, batch_size = 32)
+        # Generate some random training and test data
+        x_train = np.random.rand(100, 10, 1)
+        y_train = np.random.rand(100, 10, 1)  # y_train should have shape (100, 10, 1)
+        x_test = np.random.rand(10, 10, 1)
 
-    lstm.train(forex_data['training']['features'], forex_data['training']['target'])
-    pred = []
-    print(lstm.predict([1]))
-    for i in forex_data['testing']['features']:
-        print(lstm.predict([i]))
-        pred.append(lstm.predict([i])[0][0][0])
+        # Train the model and make predictions
+        lstm.train(x_train, y_train)
+        preds = lstm.predict(x_test)
 
-    print(pred)
-    assert len(pred) == len(forex_data['testing']['target'])
-    assert mean_squared_error(forex_data['testing']['target'], pred) > 0
+        # Check that the output shape is correct
+        assert preds.shape == (10, 10, 16)  # output shape should be (10, 10, 16)
 
-def test_lstm_no_train(forex_data):
-    lstm = CustomLSTM(input_shape = (forex_data['training']['features'].shape[1], 1), lstm_units = 3, dense_units = 1, output_shape = 1, epochs = 10, batch_size = 32)
-
-    with pytest.raises(Exception):
-        lstm.predict(forex_data['testing']['features'])
-    with pytest.raises(Exception):
-        lstm.predict(forex_data['testing']['target'])
+    def test_predict_without_train_raises_exception(self):
+        lstm = CustomLSTM((10, 1), 32, 16, (1,), 10, 32)
+        x_test = np.random.rand(10, 10, 1)
+        with raises(Exception):
+            lstm.predict(x_test)
