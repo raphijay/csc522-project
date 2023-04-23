@@ -21,14 +21,14 @@ def pre_p_forex(data):
     # Makes a copy of the resulting dataframe.
     newdata = data[data.slug == 'USD/INR'].copy()
 
-    # Encoding all dates into an integer based on days since epoch (1/1/1970)
-    newdata['date'] = newdata['date'].apply(epoch_days)
+    # Drop any rows with missing values
+    newdata.dropna(inplace = True)
 
     # Drop certain columns here
     newdata.drop(columns = ['slug', 'currency'], inplace = True)
 
-    # Drop any rows with missing values
-    newdata.dropna(inplace = True)
+    # Encoding all dates into an integer based on days since epoch (1/1/1970)
+    newdata['date'] = newdata['date'].apply(epoch_days)
 
     return newdata
 
@@ -43,14 +43,14 @@ def pre_p_usdinr(data):
     # Makes a copy of the resulting dataframe.
     newdata = data.copy()
 
-    # Encoding all dates into an integer based on days since epoch (1/1/1970)
-    newdata['Date'] = newdata['Date'].apply(epoch_days)
+    # Drop any rows with missing values
+    newdata.dropna(inplace = True)
 
     # Drop certain columns here
     newdata.drop(columns=['Volume', 'Adj Close'], inplace = True)
 
-    # Drop any rows with missing values
-    newdata.dropna(inplace = True)
+    # Encoding all dates into an integer based on days since epoch (1/1/1970)
+    newdata['Date'] = newdata['Date'].apply(epoch_days)
 
     return newdata
 
