@@ -79,7 +79,3 @@ class CustomLSTM():
         if self.model is None:
             raise Exception('You must train the LSTM model first before it can predict!')
         return self.model.predict(x_test)
-
-lstm = CustomLSTM(input_shape=(10, 1), lstm_units=32, dense_units=1, output_shape=1)
-model = lstm.lstm_model()
-model.summary()
