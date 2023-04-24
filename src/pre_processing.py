@@ -70,10 +70,12 @@ def pre_p_usdinr(data):
 ##
 def merge(forex, usdinrx):
 
+    usdinrx = usdinrx.rename(columns={"Date": "date", "Open": "open", "High": "high", "Low": "low", "Close": "close"})
+
     merged_data = pd.concat([forex, usdinrx], axis = 0, ignore_index = True)
 
     # Drop any duplicate rows based on date
-    merged_data.drop_duplicates(subset = "date")
+    merged_data.drop_duplicates(subset = "date", inplace=True)
 
     return merged_data
 
