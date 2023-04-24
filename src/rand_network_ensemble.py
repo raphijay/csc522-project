@@ -54,7 +54,39 @@ class RandomNetworkEnsemble():
             self.seed = random_seed
             self.resampler = np.random.RandomState(np.random.MT19937(np.random.SeedSequence(random_seed)))
 
-    # Getter for trees
+    ##
+    # Constructor
+    # num_networks: an integer specifying the number of neural networks to include in the ensemble.
+    # base_nn_model: the input NN for populating the ensemble - must have .fit and .predict methods, similar to sklearn models
+    # model_args: the argument map for constructing each base_nn_model
+    # random_seed: an integer specifying the seed for the random number generator used by the ensemble.
+    # self.networks: an empty list that will be populated with the neural networks in the ensemble.
+    # self.resampler: a random number generator based on the numpy library.
+    # self.last_predicted: a variable to store the last prediction made by the ensemble.
+    # self.seed: a variable to store the random seed used by the ensemble.
+    ##
+    def __oldinit__(self, num_networks, base_nn_model, model_args, random_seed: int = None):
+        self.networks           = []
+        self.resampler          = np.random
+        self.last_predicted     = None
+        self.seed               = None
+
+        if (num_networks < 2):
+            raise ValueError('Cannot have random network ensemble with less than 2 networks!')
+        self.num_networks       = num_networks
+        if (base_nn_model is None):
+            raise ValueError('A base neural network model is needed for the ensemble to be populated!')
+        if (not (hasattr(base_nn_model, 'fit') or hasattr(base_nn_model, 'predict'))):
+            raise ValueError('The base neural network model needs to have a .fit(x_train, y_train) and a predict(x_test) method to properly work in the ensemble!')
+        self.model              = base_nn_model
+        if (model_args is None or len(model_args) <= 0):
+            raise ValueError('Arguments are needed for the base neural network to be used in the generation of networks')
+        if (random_seed is not None):
+            # Recommended way to seed the resampler
+            self.seed = random_seed
+            self.resampler = np.random.RandomState(np.random.MT19937(np.random.SeedSequence(random_seed)))
+
+    # Getter for networks
     def get_networks(self):
         return self.networks
 

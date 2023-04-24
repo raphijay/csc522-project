@@ -14,12 +14,6 @@ def standard_data():
         ]), columns = ['Shape Name', 'Vertices', 'Color', 'Quantity']
     )
 
-@pytest.fixture
-def empty_data():
-    return pd.DataFrame(
-        data = np.array([])
-    )
-
-def pre_p_forex(standard_data):
+def test_pre_p_forex(standard_data):
     cleaned_data = dc.pre_p_forex(standard_data)
-    assert len(cleaned_data.index) == 3
+    assert cleaned_data == None

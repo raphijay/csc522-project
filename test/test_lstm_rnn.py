@@ -1,17 +1,11 @@
-import math
 import numpy as np
-import sklearn
 import pytest
 
-from keras.models import Sequential
-from keras.layers import Dense, Dropout, LSTM
-from sklearn.discriminant_analysis import StandardScaler
 from sklearn.model_selection import train_test_split
 
-from sklearn.metrics import mean_squared_error
 from sklearn.datasets import load_wine
 from pytest import raises
-from src.rnnModel import CustomLSTM
+from src.lstm_rnn import CustomLSTM
 
 RANDOM_SEED = 522
 

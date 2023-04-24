@@ -17,6 +17,8 @@ def epoch_days(date):
 # copy of the modified dataframe.
 ##
 def pre_p_forex(data):
+    if (not hasattr(data, 'slug')):
+        return None
 
     # Makes a copy of the resulting dataframe.
     newdata = data[data.slug == 'USD/INR'].copy()
