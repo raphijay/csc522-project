@@ -77,6 +77,7 @@ class CustomLSTM():
         if self.model is None:
             self.lstm_model()
         self.model.fit(x_train, y_train, epochs = self.epochs, batch_size = self.batch_size)
+        return self.model
 
     ##
     # Takes in a set of test data (x_test) and returns the predictions made by the LSTM model. If the

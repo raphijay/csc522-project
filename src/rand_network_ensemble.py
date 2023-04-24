@@ -138,8 +138,12 @@ class RandomNetworkEnsemble():
         # Fit each new tree to the features and target from each bootstrap sample
         # bootstraps[b][:, :-1] is the current bootstrap's features
         # bootstraps[b][:, -1] is the current bootstrap's target
-        # Decision tree's fit method requires both to work
-        self.networks = [clone(nn_m).fit(bootstraps[b][:, :-1], bootstraps[b][:, -1].reshape(-1, 1).ravel()) for b in bootstraps]
+        # Neural network's fit method requires both to work
+        try:
+            self.networks = [clone(nn_m).fit(bootstraps[b][:, :-1], bootstraps[b][:, -1].reshape(-1, 1).ravel()) for b in bootstraps]
+        except ValueError:
+            # Some neural networks need the data to be in the constructor's layer shape, so for those scenarios, reshape as needed
+            self.networks = [clone(nn_m).fit(bootstraps[b][:, :-1].reshape(1, len(bootstraps['boot_0'][:, :-1]), len(bootstraps['boot_0'][:, :-1][0])), bootstraps[b][:, -1].reshape(1, len(bootstraps['boot_0'][:, -1]), 1)) for b in bootstraps]
         return
 
     ##
