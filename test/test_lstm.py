@@ -1,9 +1,12 @@
+import math
 import numpy as np
+import sklearn
 import pytest
 
 from keras.models import Sequential
 from keras.layers import Dense, Dropout, LSTM
 from sklearn.discriminant_analysis import StandardScaler
+from sklearn.model_selection import train_test_split
 
 from sklearn.metrics import mean_squared_error
 from sklearn.datasets import load_wine
@@ -91,14 +94,40 @@ class TestCustomLSTM:
         X, y = load_wine(return_X_y=True)
 
         # Reshape the data to have 10 samples with 13 features (load_wine has 13 features)
-        X_reshaped = X[:10].reshape(1, 10, 13)
-        y_reshaped = y[:10].reshape(1, 10, 1)
+        
+        X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.25, shuffle=False, random_state=25)
+
+
+        X_reshaped_train = X_train[:10].reshape(1, 10, 13)
+        X_reshaped_test = X_test[:10].reshape(1, 10, 13)
+        y_reshaped_train = y_train[:10].reshape(1, 10, 1)
+        y_reshaped_test = y_test[:10].reshape(1, 10, 1)
+
 
         # Train the model and make predictions
-        lstm.train(X_reshaped, y_reshaped)
-        preds = lstm.predict(X_reshaped)
+        lstm.train(X_reshaped_train, y_reshaped_train)
+        preds = lstm.predict(X_reshaped_train)
 
         assert preds.shape == (1, 10, 1)
+
+        preds = preds.reshape(10, 1)
+
+        assert preds.shape == (10, 1)
+
+        # currently gives 0.012754151676780703 (does that make sense?)
+        #assert math.sqrt(sklearn.metrics.mean_squared_error(y_reshaped_train.reshape(-1), preds)) == 1
+        preds = lstm.predict(X_reshaped_test)
+
+        assert preds.shape == (1, 10, 1)
+
+        preds = preds.reshape(10, 1)
+
+        assert preds.shape == (10, 1)
+
+        # current gives 2.002606222416647 (not sure if it makes sense)
+        # assert math.sqrt(sklearn.metrics.mean_squared_error(y_reshaped_test.reshape(-1), preds)) == 0
+
+
 
     def test_predict_without_train_raises_exception(self):
         lstm = CustomLSTM((10, 1), 32, 16, (1,), 10, 32)
