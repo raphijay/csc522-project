@@ -84,21 +84,21 @@ class TestCustomLSTM:
 
         assert preds.shape == (10, 1, 1)
 
-    # def test_train_predict_wine(self):
-    #     lstm = CustomLSTM((10, 13), 32, 16, (1,), 10, 32)
+    def test_train_predict_wine(self):
+        lstm = CustomLSTM((10, 13), 32, 16, (1,), 10, 32)
 
-    #     # Load the wine dataset
-    #     X, y = load_wine(return_X_y=True)
+        # Load the wine dataset
+        X, y = load_wine(return_X_y=True)
 
-    #     # Reshape the data to have 10 samples with 13 features
-    #     X_reshaped = X[:10].reshape(10, 13)
-    #     y_reshaped = y[:10].reshape(10, 1)
+        # Reshape the data to have 10 samples with 13 features (load_wine has 13 features)
+        X_reshaped = X[:10].reshape(1, 10, 13)
+        y_reshaped = y[:10].reshape(1, 10, 1)
 
-    #     # Train the model and make predictions
-    #     lstm.train(X_reshaped, y_reshaped)
-    #     preds = lstm.predict(X_reshaped)
+        # Train the model and make predictions
+        lstm.train(X_reshaped, y_reshaped)
+        preds = lstm.predict(X_reshaped)
 
-    #     assert preds.shape == (10, 1, 1)
+        assert preds.shape == (1, 10, 1)
 
     def test_predict_without_train_raises_exception(self):
         lstm = CustomLSTM((10, 1), 32, 16, (1,), 10, 32)
