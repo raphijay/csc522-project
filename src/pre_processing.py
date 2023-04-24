@@ -99,7 +99,7 @@ def split(data):
     X = data[['date', 'open', 'high', 'low']]
     y = data.close
 
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.25, random_state = 25)
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.5, random_state = 522)
 
     return X_train, X_test, y_train, y_test
 
