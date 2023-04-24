@@ -37,9 +37,16 @@ class CustomLSTM():
         self.epochs = epochs
         self.batch_size = batch_size
 
-    # Getter for trees
-    def get_networks(self):
-        return self.networks
+    # Getter for params for the LSTM model
+    def get_params(self, deep):
+        return {
+            'input_shape': self.input_shape,
+            'lstm_units': self.lstm_units,
+            'dense_units': self.dense_units,
+            'output_shape': self.output_shape,
+            'epochs': self.epochs,
+            'batch_size': self.batch_size
+        }
 
     ##
     # Have LSTM, Dropout layers as a set of 3. A dense layer for forex prediction.
@@ -66,7 +73,7 @@ class CustomLSTM():
     # the model using lstm_model method. It then trains the model using the fit method with the
     # provided input and target data along with the number of epochs and batch size.
     ##
-    def train(self, x_train, y_train):
+    def fit(self, x_train, y_train):
         if self.model is None:
             self.lstm_model()
         self.model.fit(x_train, y_train, epochs = self.epochs, batch_size = self.batch_size)

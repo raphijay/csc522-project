@@ -52,7 +52,7 @@ class TestCustomLSTM:
         x_test = np.random.rand(10, 1)
 
         # Train the model and make predictions
-        lstm.train(x_train, y_train)
+        lstm.fit(x_train, y_train)
         preds = lstm.predict(x_test)
 
         ##
@@ -99,7 +99,7 @@ class TestCustomLSTM:
 
 
         # Train the model and make predictions
-        lstm.train(X_reshaped_train, y_reshaped_train)
+        lstm.fit(X_reshaped_train, y_reshaped_train)
         preds = lstm.predict(X_reshaped_train)
 
         assert preds.shape == (1, 10, 1)

@@ -75,7 +75,7 @@ class RandomNetworkEnsemble():
         self.num_networks       = num_networks
         if (base_nn_model is None):
             raise ValueError('A base neural network model is needed for the ensemble to be populated!')
-        if (not (hasattr(base_nn_model, 'fit') or hasattr(base_nn_model, 'predict'))):
+        if (not hasattr(base_nn_model, 'fit') or not hasattr(base_nn_model, 'predict')):
             raise ValueError('The base neural network model needs to have a .fit(x_train, y_train) and a predict(x_test) method to properly work in the ensemble!')
         self.model              = base_nn_model
         if (model_args is None or len(model_args) <= 0):
