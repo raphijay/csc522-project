@@ -31,7 +31,7 @@ class RandomNetworkEnsemble():
     # self.last_predicted: a variable to store the last prediction made by the ensemble.
     # self.seed: a variable to store the random seed used by the ensemble.
     ##
-    def __init__(self, num_networks, activation: str = 'relu', hidden_layer_sizes = (100,), learning_rate_init: float = 0.001, random_seed: int = None):
+    def __oldinit__(self, num_networks, activation: str = 'relu', hidden_layer_sizes = (100,), learning_rate_init: float = 0.001, random_seed: int = None):
         self.networks           = []
         self.resampler          = np.random
         self.last_predicted     = None
@@ -57,7 +57,7 @@ class RandomNetworkEnsemble():
     ##
     # Constructor
     # num_networks: an integer specifying the number of neural networks to include in the ensemble.
-    # base_nn_model: the input NN for populating the ensemble - must have .fit and .predict methods, similar to sklearn models
+    # base_nn_model: the input NN class type for populating the ensemble - must have .fit and .predict methods, similar to sklearn models
     # model_args: the argument map for constructing each base_nn_model
     # random_seed: an integer specifying the seed for the random number generator used by the ensemble.
     # self.networks: an empty list that will be populated with the neural networks in the ensemble.
@@ -65,7 +65,7 @@ class RandomNetworkEnsemble():
     # self.last_predicted: a variable to store the last prediction made by the ensemble.
     # self.seed: a variable to store the random seed used by the ensemble.
     ##
-    def __oldinit__(self, num_networks, base_nn_model, model_args, random_seed: int = None):
+    def __init__(self, num_networks, base_nn_model, model_args, random_seed: int = None):
         self.networks           = []
         self.resampler          = np.random
         self.last_predicted     = None
@@ -81,6 +81,7 @@ class RandomNetworkEnsemble():
         self.model              = base_nn_model
         if (model_args is None or len(model_args) <= 0):
             raise ValueError('Arguments are needed for the base neural network to be used in the generation of networks')
+        self.model_args         = model_args
         if (random_seed is not None):
             # Recommended way to seed the resampler
             self.seed = random_seed
@@ -126,12 +127,15 @@ class RandomNetworkEnsemble():
         bootstraps = self.make_bootstraps(training_data)
         # The base unit for the Random Forest - MLPRegressor
         # TODO: Change this baseline neural network to be the custom RNN once that is ready
+        """
         nn_m = MLPRegressor(
             activation = self.activation,
             hidden_layer_sizes = self.hidden_layer_sizes,
             learning_rate_init = self.learning_rate_init,
             random_state = self.seed
         )
+        """
+        nn_m = self.model(**self.model_args)
         # Fit each new tree to the features and target from each bootstrap sample
         # bootstraps[b][:, :-1] is the current bootstrap's features
         # bootstraps[b][:, -1] is the current bootstrap's target
