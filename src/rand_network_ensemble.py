@@ -9,8 +9,6 @@
 '''
 
 import numpy as np
-
-from sklearn.base import clone
 from sklearn.metrics import mean_squared_error
 
 
@@ -124,26 +122,16 @@ class RandomNetworkEnsemble():
         training_data = np.concatenate((feature_train, target_train.reshape(-1,1)), axis=1)
         # Bootstrap the training instances
         bootstraps = self.make_bootstraps(training_data)
-        # The base unit for the Random Forest - MLPRegressor
-        # TODO: Change this baseline neural network to be the custom RNN once that is ready
-        """
-        nn_m = MLPRegressor(
-            activation = self.activation,
-            hidden_layer_sizes = self.hidden_layer_sizes,
-            learning_rate_init = self.learning_rate_init,
-            random_state = self.seed
-        )
-        """
-        nn_m = self.model(**self.model_args)
-        # Fit each new tree to the features and target from each bootstrap sample
+
+        # Fit each new network to the features and target from each bootstrap sample
         # bootstraps[b][:, :-1] is the current bootstrap's features
         # bootstraps[b][:, -1] is the current bootstrap's target
         # Neural network's fit method requires both to work
         try:
-            self.networks = [clone(nn_m).fit(bootstraps[b][:, :-1], bootstraps[b][:, -1].reshape(-1, 1).ravel()) for b in bootstraps]
+            self.networks = [self.model(**self.model_args).fit(bootstraps[b][:, :-1], bootstraps[b][:, -1].reshape(-1, 1).ravel()) for b in bootstraps]
         except ValueError:
             # Some neural networks need the data to be in the constructor's layer shape, so for those scenarios, reshape as needed
-            self.networks = [clone(nn_m).fit(bootstraps[b][:, :-1].reshape(1, len(bootstraps['boot_0'][:, :-1]), len(bootstraps['boot_0'][:, :-1][0])), bootstraps[b][:, -1].reshape(1, len(bootstraps['boot_0'][:, -1]), 1)) for b in bootstraps]
+            self.networks = [self.model(**self.model_args).fit(bootstraps[b][:, :-1].reshape(1, len(bootstraps['boot_0'][:, :-1]), len(bootstraps['boot_0'][:, :-1][0])), bootstraps[b][:, -1].reshape(1, len(bootstraps['boot_0'][:, -1]), 1)) for b in bootstraps]
         return
 
     ##
