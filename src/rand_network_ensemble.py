@@ -17,43 +17,6 @@ class RandomNetworkEnsemble():
     ##
     # Constructor
     # num_networks: an integer specifying the number of neural networks to include in the ensemble.
-    # activation: a string specifying the activation function to use in the neural networks. The
-    # options are 'identity', 'logistic', 'tanh', and 'relu'.
-    # hidden_layer_sizes: a tuple specifying the number of nodes in each hidden layer of the neural
-    # networks.
-    # learning_rate_init: a float specifying the initial learning rate for the neural networks.
-    # random_seed: an integer specifying the seed for the random number generator used by the ensemble.
-    # self.networks: an empty list that will be populated with the neural networks in the ensemble.
-    # self.resampler: a random number generator based on the numpy library.
-    # self.last_predicted: a variable to store the last prediction made by the ensemble.
-    # self.seed: a variable to store the random seed used by the ensemble.
-    ##
-    def __oldinit__(self, num_networks, activation: str = 'relu', hidden_layer_sizes = (100,), learning_rate_init: float = 0.001, random_seed: int = None):
-        self.networks           = []
-        self.resampler          = np.random
-        self.last_predicted     = None
-        self.seed               = None
-
-        if (activation not in ['identity', 'logistic', 'tanh', 'relu']):
-            raise ValueError('The provided activation function is not valid!')
-        self.activation            = activation
-        if (num_networks < 2):
-            raise ValueError('Cannot have random network ensemble with less than 2 networks!')
-        self.num_networks          = num_networks
-        if (len(hidden_layer_sizes) < 1 or hidden_layer_sizes[0] < 2):
-            raise ValueError('Hidden layer sizes argument is not valid!')
-        self.hidden_layer_sizes    = hidden_layer_sizes
-        if (learning_rate_init <= 0 or learning_rate_init > 1):
-            raise ValueError('Not allowed to have a learning rate of 0 or less or greater than 1!')
-        self.learning_rate_init    = learning_rate_init
-        if (random_seed != None):
-            # Recommended way to seed the resampler
-            self.seed = random_seed
-            self.resampler = np.random.RandomState(np.random.MT19937(np.random.SeedSequence(random_seed)))
-
-    ##
-    # Constructor
-    # num_networks: an integer specifying the number of neural networks to include in the ensemble.
     # base_nn_model: the input NN class type for populating the ensemble - must have .fit and .predict methods, similar to sklearn models
     # model_args: the argument map for constructing each base_nn_model
     # random_seed: an integer specifying the seed for the random number generator used by the ensemble.
@@ -153,9 +116,13 @@ class RandomNetworkEnsemble():
     def predict(self, data_to_predict: list):
         if len(self.networks) == 0:
             raise Exception('You must train the random network ensemble first before it can predict!')
-        # Loop through each decision tree, doing its native predict for it and saving each prediction
-        self.last_predicted = [(network.predict(data_to_predict)).reshape(-1, 1) for network in self.networks]
-        # For each tree in the last_predicted set, compute the average predictions
+        # Loop through each neural network, doing its native predict for it and saving each prediction
+        try:
+            self.last_predicted = [(network.predict(data_to_predict)).reshape(-1, 1) for network in self.networks]
+        except ValueError:
+            # Some neural networks need the data to be in the constructor's layer shape, so for those scenarios, reshape as needed
+            self.last_predicted = [(network.predict(data_to_predict.reshape(1, len(data_to_predict), len(data_to_predict[0])))).reshape(-1, 1) for network in self.networks]
+        # For each network in the last_predicted set, compute the average predictions
         predicted_target = np.mean(np.concatenate(self.last_predicted, axis=1), axis=1)
         return predicted_target
 
