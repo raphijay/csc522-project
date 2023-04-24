@@ -11,7 +11,6 @@
 import numpy as np
 
 from sklearn.base import clone
-from sklearn.neural_network import MLPRegressor
 from sklearn.metrics import mean_squared_error
 
 
